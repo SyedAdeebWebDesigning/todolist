@@ -1,86 +1,138 @@
-import type { NextPage } from 'next'
-import Head from 'next/head'
-import Image from 'next/image'
+import type { NextPage } from "next";
+import { useState } from "react";
+import Navbar from "../components/Navbar";
 
 const Home: NextPage = () => {
-  return (
-    <div className="flex min-h-screen flex-col items-center justify-center py-2">
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
+	const [task, setTask] = useState<any>("");
+	const [userInput, setUserInput] = useState<any[]>([]);
 
-      <main className="flex w-full flex-1 flex-col items-center justify-center px-20 text-center">
-        <h1 className="text-6xl font-bold">
-          Welcome to{' '}
-          <a className="text-blue-600" href="https://nextjs.org">
-            Next.js!
-          </a>
-        </h1>
+	const AddTask = (val: any) => {
+		val.preventDefault();
 
-        <p className="mt-3 text-2xl">
-          Get started by editing{' '}
-          <code className="rounded-md bg-gray-100 p-3 font-mono text-lg">
-            pages/index.tsx
-          </code>
-        </p>
+		setTask(val.target.value);
+	};
 
-        <div className="mt-6 flex max-w-4xl flex-wrap items-center justify-around sm:w-full">
-          <a
-            href="https://nextjs.org/docs"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Documentation &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Find in-depth information about Next.js features and its API.
-            </p>
-          </a>
+	const addTaskToTable = (val: any) => {
+		val.preventDefault();
+		setUserInput([task, ...userInput]);
+    setTask('')
+	};
 
-          <a
-            href="https://nextjs.org/learn"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Learn &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Learn about Next.js in an interactive course with quizzes!
-            </p>
-          </a>
+  const deleteTask = (task: any) => {
+    const updatedArray = userInput.filter(userItem => userInput.indexOf(userItem) != userInput.indexOf(task))
+    setUserInput(updatedArray)
+  }
 
-          <a
-            href="https://github.com/vercel/next.js/tree/canary/examples"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Examples &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Discover and deploy boilerplate example Next.js projects.
-            </p>
-          </a>
+	return (
+		<div className="">
+			<Navbar />
+			<div>
+				<section className="text-gray-600 body-font relative">
+					<div className="container px-5 py-24 mx-auto">
+						<div className="flex flex-col text-center w-full mb-12">
+							<h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">
+								Add a task
+							</h1>
+						</div>
+						<div className="lg:w-1/2 md:w-2/3 mx-auto">
+							<div className="flex flex-wrap ">
+								<div className="p-2 w-full ">
+									<div className="relative">
+										<label
+											htmlFor="email"
+											className="leading-7 text-sm text-gray-600"
+										>
+											Task
+										</label>
+										<input
+											type="text"
+											placeholder="Enter task name"
+											onChange={AddTask}
+											value={task}
+											className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-pink-500 focus:bg-white focus:ring-2 focus:ring-pink-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
+										/>
+									</div>
+								</div>
+								<div className="p-2 w-full">
+									<button
+										type="button"
+										className="flex mx-auto text-white bg-pink-500 border-0 py-2 px-8 focus:outline-none hover:bg-pink-600 rounded text-lg"
+										onClick={addTaskToTable}
+									>
+										Submit
+									</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+			<div>
+				<div className="flex flex-col md:mx-40">
+					<div className=" sm:-mx-6 lg:-mx-8">
+						<div className="py-2 inline-block min-w-full sm:px-6 lg:px-8">
+							<div className="overflow-hidden">
+								<table className="min-w-full">
+									<thead className="border-b">
+										<tr>
+											<th
+												scope="col"
+												className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+											>
+												S.No
+											</th>
+											<th
+												scope="col"
+												className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+											>
+												Date
+											</th>
 
-          <a
-            href="https://vercel.com/import?filter=next.js&utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className="mt-6 w-96 rounded-xl border p-6 text-left hover:text-blue-600 focus:text-blue-600"
-          >
-            <h3 className="text-2xl font-bold">Deploy &rarr;</h3>
-            <p className="mt-4 text-xl">
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
+											<th
+												scope="col"
+												className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+											>
+												Task
+											</th>
+										</tr>
+									</thead>
+									<tbody>
+										{userInput.length > 0
+											? userInput.map((task, i) => (
+													<tr className="border-b" key={i}>
+														<td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+															{i + 1}
+														</td>
+														<td className="text-sm text-gray-900 font-light px-6 py-4 whitespace-nowrap">
+															Mark
+														</td>
+														<td className="flex text-sm text-gray-900 font-light px-6 py-4 items-center whitespace-nowrap">
+															{task}
+															<div className="ml-auto">
+																<button
+																	onClick={(e) => {
+																		e.preventDefault();
+																		deleteTask(task);
+																	}}
+																	className="bg-red-400 px-4 py-1 rounded-md text-white font-medium"
+																>
+																	Delete
+																</button>
+															</div>
+														</td>
+													</tr>
+											  ))
+											: ""}
+									</tbody>
+								</table>
+								{userInput.length === 0 && <p className="text-center text-xl mt-10 "> No task added</p>}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	);
+};
 
-      <footer className="flex h-24 w-full items-center justify-center border-t">
-        <a
-          className="flex items-center justify-center gap-2"
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <Image src="/vercel.svg" alt="Vercel Logo" width={72} height={16} />
-        </a>
-      </footer>
-    </div>
-  )
-}
-
-export default Home
+export default Home;
