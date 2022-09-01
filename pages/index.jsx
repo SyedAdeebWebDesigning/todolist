@@ -1,7 +1,10 @@
 import { useState } from "react";
-import Navbar from '../components/Navbar'
+import Navbar from "../components/Navbar";
+import { useSession } from "next-auth/react";
 
-const Home= () => {
+const Home = () => {
+	const { data: session } = useSession();
+
 	const [task, setTask] = useState("");
 	const [userInput, setUserInput] = useState([]);
 
@@ -11,11 +14,13 @@ const Home= () => {
 		setTask(val.target.value);
 	};
 
+
 	const addTaskToTable = (val) => {
 		val.preventDefault();
 		setUserInput([task, ...userInput]);
 		setTask("");
 	};
+
 
 	const deleteTask = (task) => {
 		const updatedArray = userInput.filter(
@@ -73,29 +78,40 @@ const Home= () => {
 							<div className="py-2 inline-block min-w-full sm:px-6 lg:px-20">
 								<div className="overflow-hidden">
 									<table className="min-w-full truncate">
-										{userInput.length > 0 && (<thead className="border-b">
-											<tr className="">
-												<th
-													scope="col"
-													className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
-												>
-													S.No
-												</th>
+										{userInput.length > 0 && (
+											<thead className="border-b">
+												<tr className="">
+													<th
+														scope="col"
+														className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+													>
+														S.No
+													</th>
+													<th
+														scope="col"
+														className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+													>
+														Name
+													</th>
 
-												<th
-													scope="col"
-													className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
-												>
-													Task
-												</th>
-											</tr>
-										</thead>)}
+													<th
+														scope="col"
+														className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
+													>
+														Task
+													</th>
+												</tr>
+											</thead>
+										)}
 										<tbody>
 											{userInput.length > 0 &&
 												userInput.map((task, i) => (
 													<tr className="border-b " key={i}>
 														<td className="px-6 py-4 sm:text-lg font-medium  text-gray-900">
 															{i + 1}
+														</td>
+														<td className="px-6 py-4 sm:text-lg font-medium  text-gray-900">
+															{(session && session.user?.name) || `anonymous`}
 														</td>
 														<td className="flex md:text-lg text-gray-900 font-semibold px-6 py-4 items-center">
 															<h1 className="truncate">{task}</h1>
