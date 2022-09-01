@@ -1,24 +1,23 @@
-import type { NextPage } from "next";
 import { useState } from "react";
-import Navbar from "../components/Navbar";
+import Navbar from '../components/Navbar'
 
-const Home: NextPage = () => {
-	const [task, setTask] = useState<any>("");
-	const [userInput, setUserInput] = useState<any[]>([]);
+const Home= () => {
+	const [task, setTask] = useState("");
+	const [userInput, setUserInput] = useState([]);
 
-	const AddTask = (val: any) => {
+	const AddTask = (val) => {
 		val.preventDefault();
 
 		setTask(val.target.value);
 	};
 
-	const addTaskToTable = (val: any) => {
+	const addTaskToTable = (val) => {
 		val.preventDefault();
 		setUserInput([task, ...userInput]);
 		setTask("");
 	};
 
-	const deleteTask = (task: any) => {
+	const deleteTask = (task) => {
 		const updatedArray = userInput.filter(
 			(userItem) => userInput.indexOf(userItem) != userInput.indexOf(task)
 		);
@@ -74,8 +73,8 @@ const Home: NextPage = () => {
 							<div className="py-2 inline-block min-w-full sm:px-6 lg:px-20">
 								<div className="overflow-hidden">
 									<table className="min-w-full truncate">
-										<thead className="border-b">
-											<tr>
+										{userInput.length > 0 && (<thead className="border-b">
+											<tr className="">
 												<th
 													scope="col"
 													className="text-sm font-medium text-gray-900 px-6 py-4 text-left"
@@ -90,31 +89,30 @@ const Home: NextPage = () => {
 													Task
 												</th>
 											</tr>
-										</thead>
+										</thead>)}
 										<tbody>
-											{userInput.length > 0
-												? userInput.map((task, i) => (
-														<tr className="border-b " key={i}>
-															<td className="px-6 py-4 sm:text-lg font-medium  text-gray-900">
-																{i + 1}
-															</td>
-															<td className="flex md:text-lg text-gray-900 font-semibold px-6 py-4 items-center">
-																<h1 className="truncate">{task}</h1>
-																<div className="ml-auto">
-																	<button
-																		onClick={(e) => {
-																			e.preventDefault();
-																			deleteTask(task);
-																		}}
-																		className="border-red px-4 py-2 ml-2 rounded-full text-red-600 font-medium"
-																	>
-																		Remove
-																	</button>
-																</div>
-															</td>
-														</tr>
-												  ))
-												: ""}
+											{userInput.length > 0 &&
+												userInput.map((task, i) => (
+													<tr className="border-b " key={i}>
+														<td className="px-6 py-4 sm:text-lg font-medium  text-gray-900">
+															{i + 1}
+														</td>
+														<td className="flex md:text-lg text-gray-900 font-semibold px-6 py-4 items-center">
+															<h1 className="truncate">{task}</h1>
+															<div className="ml-auto">
+																<button
+																	onClick={(e) => {
+																		e.preventDefault();
+																		deleteTask(task);
+																	}}
+																	className="border-red px-4 py-2 ml-2 rounded-full text-red-600 font-medium"
+																>
+																	Remove
+																</button>
+															</div>
+														</td>
+													</tr>
+												))}
 										</tbody>
 									</table>
 									{userInput.length === 0 && (
