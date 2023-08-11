@@ -2,27 +2,31 @@ import { useState } from "react";
 import Navbar from "../components/Navbar";
 import { useSession } from "next-auth/react";
 
-const Home = () => {
+const Home = () =>
+{
 	const { data: session } = useSession();
 
-	const [task, setTask] = useState("");
-	const [userInput, setUserInput] = useState([]);
-	
-	const AddTask = (val) => {
+	const [ task, setTask ] = useState("");
+	const [ userInput, setUserInput ] = useState([]);
+
+	const AddTask = (val) =>
+	{
 		val.preventDefault();
 
 		setTask(val.target.value);
 	};
 
 
-	const addTaskToTable = (val) => {
+	const addTaskToTable = (val) =>
+	{
 		val.preventDefault();
-		setUserInput([task, ...userInput]);
+		setUserInput([ task, ...userInput ]);
 		setTask("");
 	};
 
 
-	const deleteTask = (task) => {
+	const deleteTask = (task) =>
+	{
 		const updatedArray = userInput.filter(
 			(userItem) => userInput.indexOf(userItem) != userInput.indexOf(task)
 		);
@@ -37,7 +41,7 @@ const Home = () => {
 					<div className="container px-5 py-24 mx-auto">
 						<div className="flex flex-col text-center w-full mb-12">
 							<h1 className="sm:text-3xl text-2xl font-medium title-font mb-4 text-gray-900">
-								Add a task.
+								Add a Task.
 							</h1>
 						</div>
 						<div className="lg:w-1/2 md:w-2/3 mx-auto">
@@ -53,8 +57,8 @@ const Home = () => {
 										<input
 											type="text"
 											placeholder="Enter task name"
-											onChange={AddTask}
-											value={task}
+											onChange={ AddTask }
+											value={ task }
 											className="w-full bg-gray-100 bg-opacity-50 rounded border border-gray-300 focus:border-pink-500 focus:bg-white focus:ring-2 focus:ring-pink-200 text-base outline-none text-gray-700 py-1 px-3 leading-8 transition-colors duration-200 ease-in-out"
 										/>
 									</div>
@@ -63,7 +67,7 @@ const Home = () => {
 									<button
 										type="button"
 										className="flex mx-auto text-white bg-pink-500 border-0 py-2 px-8 focus:outline-none hover:bg-pink-600 rounded text-lg"
-										onClick={addTaskToTable}
+										onClick={ addTaskToTable }
 									>
 										Submit
 									</button>
@@ -78,7 +82,7 @@ const Home = () => {
 							<div className="py-2 inline-block min-w-full sm:px-6 lg:px-20">
 								<div className="overflow-hidden">
 									<table className="min-w-full truncate">
-										{userInput.length > 0 && (
+										{ userInput.length > 0 && (
 											<thead className="border-b">
 												<tr className="">
 													<th
@@ -102,25 +106,26 @@ const Home = () => {
 													</th>
 												</tr>
 											</thead>
-										)}
+										) }
 										<tbody>
-											{userInput.length > 0 &&
+											{ userInput.length > 0 &&
 												userInput.map((task, i) => (
-													<tr className="border-b " key={i}>
+													<tr className="border-b " key={ i }>
 														<td className="px-6 py-4 sm:text-lg font-medium  text-gray-900">
-															{i + 1}
+															{ i + 1 }
 														</td>
 														<td className="px-6 py-4 sm:text-lg font-medium  text-gray-900">
-															{(session && session.user?.name) || `anonymous`}
+															{ (session && session.user?.name) || `anonymous` }
 														</td>
 														<td className="flex md:text-lg text-gray-900 font-semibold px-6 py-4 items-center">
-															<h1 className="truncate">{task}</h1>
+															<h1 className="truncate">{ task }</h1>
 															<div className="ml-auto">
 																<button
-																	onClick={(e) => {
+																	onClick={ (e) =>
+																	{
 																		e.preventDefault();
 																		deleteTask(task);
-																	}}
+																	} }
 																	className="border-red px-4 py-2 ml-2 rounded-full text-red-600 font-medium"
 																>
 																	Remove
@@ -128,12 +133,12 @@ const Home = () => {
 															</div>
 														</td>
 													</tr>
-												))}
+												)) }
 										</tbody>
 									</table>
-									{userInput.length === 0 && (
+									{ userInput.length === 0 && (
 										<p className="text-center text-xl mt-10 "> No task added</p>
-									)}
+									) }
 								</div>
 							</div>
 						</div>
